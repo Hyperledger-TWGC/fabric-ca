@@ -13,7 +13,8 @@ import (
 	"crypto/rsa"
 	"crypto/sha1"
 	"crypto/sha256"
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"encoding/pem"
 	"sync"
 )

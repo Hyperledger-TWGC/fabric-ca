@@ -8,7 +8,8 @@ import (
 	"bufio"
 	"fmt"
 	"net"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"sort"
 	"strings"
 )

@@ -19,6 +19,7 @@ package lib
 import (
 	"crypto/rand"
 	"crypto/x509"
+	//"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"errors"

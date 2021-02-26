@@ -9,7 +9,8 @@ package caerrors
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"reflect"
 
 	cfsslapi "github.com/cloudflare/cfssl/api"

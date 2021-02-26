@@ -7,7 +7,8 @@ SPDX-License-Identifier: Apache-2.0
 package lib
 
 import (
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"encoding/asn1"
 	"encoding/pem"
 	"time"

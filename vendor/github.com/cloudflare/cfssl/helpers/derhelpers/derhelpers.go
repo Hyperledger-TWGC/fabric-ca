@@ -6,7 +6,9 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/rsa"
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/sm2"
 
 	cferr "github.com/cloudflare/cfssl/errors"
 )
@@ -35,6 +37,9 @@ func ParsePrivateKeyDER(keyDER []byte) (key crypto.Signer, err error) {
 		return generalKey.(*rsa.PrivateKey), nil
 	case *ecdsa.PrivateKey:
 		return generalKey.(*ecdsa.PrivateKey), nil
+	case *sm2.PrivateKey:
+		return generalKey.(*sm2.PrivateKey), nil
+
 	}
 
 	// should never reach here

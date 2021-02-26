@@ -8,8 +8,10 @@ package lib
 
 import (
 	"context"
-	"net/http"
-	"net/http/httptest"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
+	//"net/http/httptest"
+	"github.com/Hyperledger-TWGC/net-go-gm/http/httptest"
 	"os"
 	"testing"
 

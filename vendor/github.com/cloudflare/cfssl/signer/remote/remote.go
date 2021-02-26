@@ -1,10 +1,12 @@
 package remote
 
 import (
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"encoding/json"
 	"errors"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 
 	"github.com/cloudflare/cfssl/api/client"
 	"github.com/cloudflare/cfssl/certdb"

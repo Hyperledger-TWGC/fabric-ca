@@ -2,8 +2,10 @@
 package config
 
 import (
-	"crypto/tls"
-	"crypto/x509"
+	//"crypto/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"encoding/asn1"
 	"encoding/json"
 	"errors"

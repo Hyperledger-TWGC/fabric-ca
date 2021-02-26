@@ -8,7 +8,8 @@ import (
 	"compress/flate"
 	"compress/gzip"
 	"io"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"strings"
 )
 

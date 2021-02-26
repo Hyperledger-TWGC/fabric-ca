@@ -3,13 +3,15 @@ package client
 
 import (
 	"bytes"
-	"crypto/tls"
+	//"crypto/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
 	"encoding/json"
 	stderr "errors"
 	"fmt"
 	"io/ioutil"
 	"net"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"net/url"
 	"strconv"
 	"strings"

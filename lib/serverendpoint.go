@@ -8,7 +8,8 @@ package lib
 
 import (
 	"encoding/json"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 
 	"github.com/cloudflare/cfssl/api"
 	"github.com/cloudflare/cfssl/log"

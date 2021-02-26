@@ -6,14 +6,16 @@ package revoke
 import (
 	"bytes"
 	"crypto"
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"crypto/x509/pkix"
 	"encoding/base64"
 	"encoding/pem"
 	"errors"
 	"io"
 	"io/ioutil"
-	"net/http"
+	//"net/http
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	neturl "net/url"
 	"sync"
 	"time"

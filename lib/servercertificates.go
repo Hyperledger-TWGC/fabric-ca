@@ -8,7 +8,8 @@ package lib
 
 import (
 	"fmt"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"os"
 
 	"github.com/cloudflare/cfssl/log"

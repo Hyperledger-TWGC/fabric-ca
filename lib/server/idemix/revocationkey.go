@@ -9,6 +9,7 @@ package idemix
 import (
 	"crypto/ecdsa"
 	"crypto/x509"
+	//"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"encoding/pem"
 	"io/ioutil"
 

@@ -7,7 +7,8 @@ import (
 	"bufio"
 	"io"
 	"net"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 )
 
 // HeaderFunc is part of the http.ResponseWriter interface.

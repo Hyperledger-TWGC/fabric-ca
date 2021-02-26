@@ -54,8 +54,14 @@ func initFactories(config *FactoryOpts) error {
 	bccspMap = make(map[string]bccsp.BCCSP)
 
 	// Software-Based BCCSP
-	if config.ProviderName == "SW" && config.SwOpts != nil {
-		f := &SWFactory{}
+	if config.SwOpts != nil {
+		var f BCCSPFactory
+		if config.ProviderName == "GMSW" {
+			f = &GMSWFactory{}
+		} else {
+			f = &SWFactory{}
+		}
+		//f := &SWFactory{}
 		err := initBCCSP(f, config)
 		if err != nil {
 			return errors.Wrap(err, "Failed initializing SW.BCCSP")
@@ -95,6 +101,8 @@ func GetBCCSPFromOpts(config *FactoryOpts) (bccsp.BCCSP, error) {
 	switch config.ProviderName {
 	case "SW":
 		f = &SWFactory{}
+	case "GMSW":
+		f = &GMSWFactory{}
 	case "PKCS11":
 		f = &PKCS11Factory{}
 	case "PLUGIN":
