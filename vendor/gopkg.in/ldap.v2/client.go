@@ -1,7 +1,8 @@
 package ldap
 
 import (
-	"crypto/tls"
+	//"crypto/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
 	"time"
 )
 
