@@ -20,7 +20,9 @@ import (
 	"bytes"
 	"crypto/ecdsa"
 	"crypto/rsa"
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/sm2"
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
@@ -29,7 +31,8 @@ import (
 	"io/ioutil"
 	"math/big"
 	mrand "math/rand"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"net/url"
 	"os"
 	"path"
@@ -196,7 +199,7 @@ func CreateToken(csp bccsp.BCCSP, cert []byte, key bccsp.Key, method, uri string
 				return "", err
 			}
 	*/
-	case *ecdsa.PublicKey:
+	case *ecdsa.PublicKey, *sm2.PublicKey:
 		token, err = GenECDSAToken(csp, cert, key, method, uri, body)
 		if err != nil {
 			return "", err
@@ -338,7 +341,8 @@ func DecodeToken(token string) (*x509.Certificate, string, string, error) {
 }
 
 //GetECPrivateKey get *ecdsa.PrivateKey from key pem
-func GetECPrivateKey(raw []byte) (*ecdsa.PrivateKey, error) {
+func GetECPrivateKey(raw []byte) (interface{}, error) {
+//func GetECPrivateKey(raw []byte) (*ecdsa.PrivateKey, error) {
 	decoded, _ := pem.Decode(raw)
 	if decoded == nil {
 		return nil, errors.New("Failed to decode the PEM-encoded ECDSA key")
@@ -352,6 +356,8 @@ func GetECPrivateKey(raw []byte) (*ecdsa.PrivateKey, error) {
 		switch key.(type) {
 		case *ecdsa.PrivateKey:
 			return key.(*ecdsa.PrivateKey), nil
+		case *sm2.PrivateKey:
+			return key.(*sm2.PrivateKey), nil
 		case *rsa.PrivateKey:
 			return nil, errors.New("Expecting EC private key but found RSA private key")
 		default:

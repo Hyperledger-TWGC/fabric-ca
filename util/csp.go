@@ -20,8 +20,10 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/rsa"
-	"crypto/tls"
-	"crypto/x509"
+	//"crypto/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"encoding/hex"
 	"encoding/pem"
 	"fmt"
@@ -52,6 +54,8 @@ func GetDefaultBCCSP() bccsp.BCCSP {
 // InitBCCSP initializes BCCSP
 func InitBCCSP(optsPtr **factory.FactoryOpts, mspDir, homeDir string) (bccsp.BCCSP, error) {
 	err := ConfigureBCCSP(optsPtr, mspDir, homeDir)
+	opts2 := *optsPtr
+	log.Infof("======ProviderName %s", opts2.ProviderName)
 	if err != nil {
 		return nil, err
 	}
@@ -145,6 +149,13 @@ func getBCCSPKeyOpts(kr csr.KeyRequest, ephemeral bool) (opts bccsp.KeyGenOpts, 
 			return nil, errors.New("Unsupported ECDSA key size: 521")
 		default:
 			return nil, errors.Errorf("Invalid ECDSA key size: %d", kr.Size())
+		}
+	case "sm2":
+		switch kr.Size() {
+		case 256:
+			return &bccsp.SM2KeyGenOpts{Temporary: ephemeral}, nil
+		default:
+			return nil, errors.Errorf("Invalid sm2 key size: %d", kr.Size())
 		}
 	default:
 		return nil, errors.Errorf("Invalid algorithm: %s", kr.Algo())
