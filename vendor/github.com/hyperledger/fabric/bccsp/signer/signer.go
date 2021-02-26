@@ -86,3 +86,8 @@ func (s *bccspCryptoSigner) Public() crypto.PublicKey {
 func (s *bccspCryptoSigner) Sign(rand io.Reader, digest []byte, opts crypto.SignerOpts) ([]byte, error) {
 	return s.csp.Sign(s.key, digest, opts)
 }
+
+
+func (s *bccspCryptoSigner) Decrypt(_ io.Reader, cipher []byte, opts crypto.DecrypterOpts) (plaintext []byte, err error) {
+	return s.csp.Decrypt(s.key, cipher, opts)
+}
