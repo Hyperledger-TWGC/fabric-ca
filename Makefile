@@ -120,14 +120,14 @@ bin/%: $(GO_SOURCE)
 # directory so that subsequent builds are faster
 build/docker/bin/%:
 	@echo "Building $@"
-	@mkdir -p $(@D) build/docker/$(@F)/pkg build/docker/cache
-	@$(DRUN) \
+	mkdir -p $(@D) build/docker/$(@F)/pkg build/docker/cache
+	$(DRUN) \
 		-v $(abspath build/docker/bin):/opt/gopath/bin \
 		-v $(abspath build/docker/$(@F)/pkg):/opt/gopath/pkg \
 		-v $(abspath build/docker/cache):/opt/gopath/cache \
 		-e GOCACHE=/opt/gopath/cache \
 		$(BASE_DOCKER_NS)/fabric-baseimage:$(BASE_DOCKER_TAG) \
-		go install -ldflags "$(DOCKER_GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
+		go install -tags=single_cert -ldflags "$(DOCKER_GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
 	@touch $@
 
 build/image/%/$(DUMMY): Makefile build/image/%/payload
