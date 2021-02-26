@@ -7,7 +7,11 @@ import (
 	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/x509"
+	"fmt"
+	"github.com/Hyperledger-TWGC/ccs-gm/sm2"
+
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/pem"
@@ -51,6 +55,7 @@ type BasicKeyRequest struct {
 	S int    `json:"size" yaml:"size"`
 }
 
+//TODO ghost
 // NewBasicKeyRequest returns a default BasicKeyRequest.
 func NewBasicKeyRequest() *BasicKeyRequest {
 	return &BasicKeyRequest{"ecdsa", curveP256}
@@ -92,6 +97,15 @@ func (kr *BasicKeyRequest) Generate() (crypto.PrivateKey, error) {
 			return nil, errors.New("invalid curve")
 		}
 		return ecdsa.GenerateKey(curve, rand.Reader)
+	case "sm2":
+		//var curve elliptic.Curve
+		//switch kr.Size() {
+		//case curveP256:
+		//	curve = sm2.P256()
+		//default:
+		//	return nil, errors.New("invalid curve")
+		//}
+		return sm2.GenerateKey(rand.Reader)
 	default:
 		return nil, errors.New("invalid algorithm")
 	}
@@ -122,6 +136,15 @@ func (kr *BasicKeyRequest) SigAlgo() x509.SignatureAlgorithm {
 			return x509.ECDSAWithSHA256
 		default:
 			return x509.ECDSAWithSHA1
+		}
+	case "sm2":
+		switch kr.Size() {
+		case curveP256:
+			return x509.SM2WithSM3
+		default:
+			err := errors.New("sm2 unknown elliptic curve")
+			fmt.Println(err)
+			return x509.SM2WithSM3
 		}
 	default:
 		return x509.UnknownSignatureAlgorithm
@@ -211,6 +234,17 @@ func ParseRequest(req *CertificateRequest) (csr, key []byte, err error) {
 		}
 		key = pem.EncodeToMemory(&block)
 	case *ecdsa.PrivateKey:
+		key, err = x509.MarshalECPrivateKey(priv)
+		if err != nil {
+			err = cferr.Wrap(cferr.PrivateKeyError, cferr.Unknown, err)
+			return
+		}
+		block := pem.Block{
+			Type:  "EC PRIVATE KEY",
+			Bytes: key,
+		}
+		key = pem.EncodeToMemory(&block)
+	case *sm2.PrivateKey:
 		key, err = x509.MarshalECPrivateKey(priv)
 		if err != nil {
 			err = cferr.Wrap(cferr.PrivateKeyError, cferr.Unknown, err)
