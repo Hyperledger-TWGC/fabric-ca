@@ -4,7 +4,8 @@
 
 package mux
 
-import "net/http"
+//import "net/http"
+import "github.com/Hyperledger-TWGC/net-go-gm/http"
 
 // SetURLVars sets the URL variables for the given request, to be accessed via
 // mux.Vars for testing route behaviour. Arguments are not modified, a shallow

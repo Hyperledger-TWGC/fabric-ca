@@ -4,7 +4,8 @@ package handlers
 
 import (
 	"fmt"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 )
 
 type loggingResponseWriter interface {

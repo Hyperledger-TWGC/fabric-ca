@@ -16,8 +16,8 @@ package expfmt
 import (
 	"fmt"
 	"io"
-	"net/http"
-
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"github.com/golang/protobuf/proto"
 	"github.com/matttproud/golang_protobuf_extensions/pbutil"
 	"github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg"

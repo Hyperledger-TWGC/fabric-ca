@@ -5,7 +5,9 @@ import (
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/rsa"
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/sm2"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"errors"
@@ -171,6 +173,16 @@ func printSubjectInformation(subj *pkix.Name, pkAlgo x509.PublicKeyAlgorithm, pk
 			buf.WriteString(fmt.Sprintf("%16sCurve: %s\n", "", ecdsaKey.Params().Name))
 		} else {
 			return errors.New("certinfo: Expected ecdsa.PublicKey for type x509.DSA")
+		}
+	case x509.SM2:
+		buf.WriteString(fmt.Sprintf("ECDSA\n"))
+		if sm2Key, ok := pk.(*sm2.PublicKey); ok {
+			buf.WriteString(fmt.Sprintf("%16sPublic-Key: (%d bit)\n", "", sm2Key.Params().BitSize))
+			dsaKeyPrinter("X", sm2Key.X, buf)
+			dsaKeyPrinter("Y", sm2Key.Y, buf)
+			buf.WriteString(fmt.Sprintf("%16sCurve: %s\n", "", sm2Key.Params().Name))
+		} else {
+			return errors.New("certinfo: Expected sm2.PublicKey for type x509.DSA")
 		}
 	default:
 		return errors.New("certinfo: Unknown public key type")
