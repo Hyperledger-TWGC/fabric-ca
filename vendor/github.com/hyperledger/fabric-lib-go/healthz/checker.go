@@ -12,7 +12,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"sync"
 	"time"
 )

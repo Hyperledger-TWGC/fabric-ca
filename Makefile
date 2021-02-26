@@ -29,9 +29,9 @@
 #   - clean-all - cleans the build area and release packages
 
 PROJECT_NAME = fabric-ca
-BASE_VERSION = 1.4.10
-PREV_VERSION = 1.4.9
-IS_RELEASE = false
+BASE_VERSION = 1.4.9
+PREV_VERSION = 1.4.8
+IS_RELEASE = true
 
 ARCH=$(shell go env GOARCH)
 MARCH=$(shell go env GOOS)-$(shell go env GOARCH)
@@ -113,21 +113,21 @@ fabric-ca-server: bin/fabric-ca-server
 
 bin/%: $(GO_SOURCE)
 	@echo "Building ${@F} in bin directory ..."
-	@mkdir -p bin && go build -o bin/${@F} -tags "pkcs11" -ldflags "$(GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
+	mkdir -p bin && go build -o bin/${@F} -tags "pkcs11 single_cert" -ldflags "$(GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
 	@echo "Built bin/${@F}"
 
 # We (re)build a package within a docker context but persist the $GOPATH/pkg
 # directory so that subsequent builds are faster
 build/docker/bin/%:
 	@echo "Building $@"
-	@mkdir -p $(@D) build/docker/$(@F)/pkg build/docker/cache
-	@$(DRUN) \
+	mkdir -p $(@D) build/docker/$(@F)/pkg build/docker/cache
+	$(DRUN) \
 		-v $(abspath build/docker/bin):/opt/gopath/bin \
 		-v $(abspath build/docker/$(@F)/pkg):/opt/gopath/pkg \
 		-v $(abspath build/docker/cache):/opt/gopath/cache \
 		-e GOCACHE=/opt/gopath/cache \
 		$(BASE_DOCKER_NS)/fabric-baseimage:$(BASE_DOCKER_TAG) \
-		go install -ldflags "$(DOCKER_GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
+		go install -tags=single_cert -ldflags "$(DOCKER_GO_LDFLAGS)" $(PKGNAME)/$(path-map.${@F})
 	@touch $@
 
 build/image/%/$(DUMMY): Makefile build/image/%/payload
@@ -259,12 +259,13 @@ release/linux-ppc64le: $(patsubst %,release/linux-ppc64le/bin/%, $(RELEASE_PKGS)
 release/linux-s390x: GOARCH=s390x
 release/linux-s390x: $(patsubst %,release/linux-s390x/bin/%, $(RELEASE_PKGS))
 
-release/%/bin/fabric-ca-client: GO_TAGS+= caclient
+release/%/bin/fabric-ca-client: GO_TAGS+= caclient single_cert
 release/%/bin/fabric-ca-client: $(GO_SOURCE)
 	@echo "Building $@ for $(GOOS)-$(GOARCH)"
 	mkdir -p $(@D)
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(abspath $@) -tags "$(GO_TAGS)" -ldflags "$(GO_LDFLAGS)" $(PKGNAME)/$(path-map.$(@F))
 
+release/%/bin/fabric-ca-server: GO_TAGS+= single_cert
 release/%/bin/fabric-ca-server: $(GO_SOURCE)
 	@echo "Building $@ for $(GOOS)-$(GOARCH)"
 	mkdir -p $(@D)

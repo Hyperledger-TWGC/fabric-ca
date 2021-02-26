@@ -49,6 +49,25 @@ func ConfigureBCCSP(optsPtr **factory.FactoryOpts, mspDir, homeDir string) error
 		} else if opts.SwOpts.FileKeystore.KeyStorePath == "" {
 			opts.SwOpts.FileKeystore.KeyStorePath = path.Join("msp", "keystore")
 		}
+	} else if strings.ToUpper(opts.ProviderName) == "GMSW" {
+		if opts.SwOpts == nil {
+			opts.SwOpts = &factory.SwOpts{}
+		}
+		if opts.SwOpts.HashFamily == "" {
+			opts.SwOpts.HashFamily = "SHA2"
+		}
+		if opts.SwOpts.SecLevel == 0 {
+			opts.SwOpts.SecLevel = 256
+		}
+		if opts.SwOpts.FileKeystore == nil {
+			opts.SwOpts.FileKeystore = &factory.FileKeystoreOpts{}
+		}
+		// The mspDir overrides the KeyStorePath; otherwise, if not set, set default
+		if mspDir != "" {
+			opts.SwOpts.FileKeystore.KeyStorePath = path.Join(mspDir, "keystore")
+		} else if opts.SwOpts.FileKeystore.KeyStorePath == "" {
+			opts.SwOpts.FileKeystore.KeyStorePath = path.Join("msp", "keystore")
+		}
 	}
 	err = makeFileNamesAbsolute(opts, homeDir)
 	if err != nil {

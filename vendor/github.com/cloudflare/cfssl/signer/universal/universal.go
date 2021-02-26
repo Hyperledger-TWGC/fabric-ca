@@ -2,8 +2,10 @@
 package universal
 
 import (
-	"crypto/x509"
-	"net/http"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 
 	"github.com/cloudflare/cfssl/certdb"
 	"github.com/cloudflare/cfssl/config"

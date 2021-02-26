@@ -10,7 +10,8 @@ package mysql
 
 import (
 	"bytes"
-	"crypto/tls"
+	//"crypto/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
 	"database/sql/driver"
 	"encoding/binary"
 	"errors"

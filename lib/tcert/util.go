@@ -23,7 +23,9 @@ import (
 	"crypto/ecdsa"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/sm2"
 	"encoding/base64"
 	"encoding/pem"
 	"errors"
@@ -318,6 +320,8 @@ func GetPrivateKey(buf []byte) (interface{}, error) {
 		return privateKey, nil
 	case *ecdsa.PrivateKey:
 		return privateKey, nil
+	case *sm2.PrivateKey:
+		return privateKey, nil
 	default:
 		return nil, errors.New("Key is neither RSA nor ECDSA")
 	}
@@ -331,7 +335,7 @@ func ParsePrivateKey(der []byte) (interface{}, error) {
 	}
 	if key, err := x509.ParsePKCS8PrivateKey(der); err == nil {
 		switch key := key.(type) {
-		case *rsa.PrivateKey, *ecdsa.PrivateKey:
+		case *rsa.PrivateKey, *ecdsa.PrivateKey, *sm2.PrivateKey:
 			return key, nil
 		default:
 			return nil, errors.New("Key is neither RSA nor ECDSA")

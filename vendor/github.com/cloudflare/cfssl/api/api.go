@@ -4,7 +4,8 @@ package api
 import (
 	"encoding/json"
 	"io/ioutil"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 
 	"github.com/cloudflare/cfssl/errors"
 	"github.com/cloudflare/cfssl/log"

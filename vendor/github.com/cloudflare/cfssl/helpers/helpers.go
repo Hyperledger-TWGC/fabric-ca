@@ -8,8 +8,11 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rsa"
-	"crypto/tls"
-	"crypto/x509"
+	//"crypto/tls"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/sm2"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/binary"
@@ -61,6 +64,8 @@ func KeyLength(key interface{}) int {
 	}
 	if ecdsaKey, ok := key.(*ecdsa.PublicKey); ok {
 		return ecdsaKey.Curve.Params().BitSize
+	} else if sm2Key, ok := key.(*sm2.PublicKey); ok {
+		return sm2Key.Curve.Params().BitSize
 	} else if rsaKey, ok := key.(*rsa.PublicKey); ok {
 		return rsaKey.N.BitLen()
 	}
@@ -147,6 +152,12 @@ func SignatureString(alg x509.SignatureAlgorithm) string {
 		return "ECDSAWithSHA384"
 	case x509.ECDSAWithSHA512:
 		return "ECDSAWithSHA512"
+	case x509.SM2WithSM3:
+		return "SM2WithSM3"
+	case x509.SM2WithSHA1:
+		return "SM2WithSHA1"
+	case x509.SM2WithSHA256:
+		return "SM2WithSHA256"
 	default:
 		return "Unknown Signature"
 	}
@@ -180,6 +191,12 @@ func HashAlgoString(alg x509.SignatureAlgorithm) string {
 		return "SHA384"
 	case x509.ECDSAWithSHA512:
 		return "SHA512"
+	case x509.SM2WithSM3:
+		return "SM3"
+	case x509.SM2WithSHA1:
+		return "SHA1"
+	case x509.SM2WithSHA256:
+		return "SHA256"
 	default:
 		return "Unknown Hash Algorithm"
 	}
@@ -450,6 +467,13 @@ func SignerAlgo(priv crypto.Signer) x509.SignatureAlgorithm {
 			return x509.ECDSAWithSHA256
 		default:
 			return x509.ECDSAWithSHA1
+		}
+	case *sm2.PublicKey:
+		switch pub.Curve {
+		case sm2.P256():
+			return x509.SM2WithSM3
+		default:
+			return x509.SM2WithSM3
 		}
 	default:
 		return x509.UnknownSignatureAlgorithm

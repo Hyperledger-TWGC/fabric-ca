@@ -9,7 +9,8 @@ package lib
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"os"
 	"strconv"
 

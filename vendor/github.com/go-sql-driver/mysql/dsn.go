@@ -11,7 +11,8 @@ package mysql
 import (
 	"bytes"
 	"crypto/rsa"
-	"crypto/tls"
+	//"crypto/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
 	"errors"
 	"fmt"
 	"math/big"

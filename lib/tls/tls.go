@@ -17,8 +17,10 @@ limitations under the License.
 package tls
 
 import (
-	"crypto/tls"
-	"crypto/x509"
+	//"crypto/tls"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"io/ioutil"
 	"time"
 
@@ -37,6 +39,12 @@ var DefaultCipherSuites = []uint16{
 	tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
 	tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
 	tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+}
+
+// strong GM TLS cipher suites
+var DefaultGMTLSCipherSuites = []uint16{
+	tls.GMTLS_SM2_WITH_SM4_SM3,
+	tls.GMTLS_ECDHE_SM2_WITH_SM4_SM3,
 }
 
 // ServerTLSConfig defines key material for a TLS server
@@ -109,9 +117,15 @@ func GetClientTLSConfig(cfg *ClientTLSConfig, csp bccsp.BCCSP) (*tls.Config, err
 		}
 	}
 
+	// config := &tls.Config{
+	// 	Certificates: certs,
+	// 	RootCAs:      rootCAPool,
+	// }
+
 	config := &tls.Config{
 		Certificates: certs,
 		RootCAs:      rootCAPool,
+		GMSupport:    &tls.GMSupport{},
 	}
 
 	return config, nil
