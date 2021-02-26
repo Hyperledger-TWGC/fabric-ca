@@ -8,11 +8,13 @@ package operations
 
 import (
 	"context"
-	"crypto/tls"
+	//"crypto/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
 	"fmt"
 	"io"
 	"net"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"strings"
 	"time"
 

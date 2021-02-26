@@ -11,7 +11,9 @@ import (
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/rsa"
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/sm2"
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
@@ -1171,9 +1173,34 @@ func validateMatchingKeys(cert *x509.Certificate, keyFile string) error {
 			return err
 		}
 
-		if privKey.PublicKey.X.Cmp(pubKey.(*ecdsa.PublicKey).X) != 0 {
-			return errors.New("Public key and private key do not match")
+		vk, ok := (privKey).(*ecdsa.PrivateKey)
+		if ok {
+			if vk.PublicKey.X.Cmp(pubKey.(*ecdsa.PublicKey).X) != 0 {
+				return errors.New("Public key and private key do not match")
+			}
+		} else {
+			fmt.Println("e is not an ecdsa.PrivateKey")
 		}
+
+		//if privKey.PublicKey.X.Cmp(pubKey.(*ecdsa.PublicKey).X) != 0 {
+		//	return errors.New("Public key and private key do not match")
+		//}
+	case *sm2.PublicKey:
+		privKey, err := util.GetECPrivateKey(keyPEM)
+		if err != nil {
+			return err
+		}
+		vk, ok := (privKey).(*sm2.PrivateKey)
+		if ok {
+			if vk.PublicKey.X.Cmp(pubKey.(*sm2.PublicKey).X) != 0 {
+				return errors.New("Public key and private key do not match")
+			}
+		} else {
+			fmt.Println("e is not an sm2.PrivateKey")
+		}
+		//if privKey.PublicKey.X.Cmp(pubKey.(*sm2.PublicKey).X) != 0 {
+		//	return errors.New("Public key and private key do not match")
+		//}
 	}
 
 	return nil

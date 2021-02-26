@@ -7,8 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 package operations
 
 import (
-	"crypto/tls"
-	"crypto/x509"
+	//"crypto/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/sm2"
+	//"crypto/x509"
 	"io/ioutil"
 )
 
@@ -21,6 +24,11 @@ var (
 		tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
 		tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
 		tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+	}
+	// strong GM TLS cipher suites
+	DefaultGMTLSCipherSuites = []uint16{
+		tls.GMTLS_SM2_WITH_SM4_SM3,
+		tls.GMTLS_ECDHE_SM2_WITH_SM4_SM3,
 	}
 )
 
@@ -50,10 +58,27 @@ func (t *TLS) Config() (*tls.Config, error) {
 			}
 			caCertPool.AppendCertsFromPEM(caPem)
 		}
-		tlsConfig = &tls.Config{
-			Certificates: []tls.Certificate{cert},
-			CipherSuites: DefaultTLSCipherSuites,
-			ClientCAs:    caCertPool,
+		// tlsConfig = &tls.Config{
+		// 	Certificates: []tls.Certificate{cert},
+		// 	CipherSuites: DefaultTLSCipherSuites,
+		// 	ClientCAs:    caCertPool,
+		// }
+
+		tlsConfig := &tls.Config{}
+		_, ok := cert.PrivateKey.(*sm2.PrivateKey)
+		if ok {
+			tlsConfig = &tls.Config{
+				Certificates: []tls.Certificate{cert},
+				CipherSuites: DefaultGMTLSCipherSuites,
+				ClientCAs:    caCertPool,
+				GMSupport: &tls.GMSupport{},
+			}
+		} else {
+			tlsConfig = &tls.Config{
+				Certificates: []tls.Certificate{cert},
+				CipherSuites: DefaultTLSCipherSuites,
+				ClientCAs:    caCertPool,
+			}
 		}
 		if t.ClientCertRequired {
 			tlsConfig.ClientAuth = tls.RequireAndVerifyClientCert

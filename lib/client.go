@@ -14,7 +14,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"net/url"
 	"os"
 	"path"
@@ -160,7 +161,8 @@ func (c *Client) initHTTPClient() error {
 			return fmt.Errorf("Failed to get client TLS config: %s", err2)
 		}
 		// set the default ciphers
-		tlsConfig.CipherSuites = tls.DefaultCipherSuites
+		// tlsConfig.CipherSuites = tls.DefaultCipherSuites
+		tlsConfig.CipherSuites = tls.DefaultGMTLSCipherSuites
 		tr.TLSClientConfig = tlsConfig
 	}
 	c.httpClient = &http.Client{Transport: tr}

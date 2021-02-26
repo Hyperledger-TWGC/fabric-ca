@@ -8,11 +8,13 @@ package x509_test
 
 import (
 	"bytes"
-	"crypto/x509"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	"os"
 	"path/filepath"
 	"testing"

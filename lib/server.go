@@ -8,13 +8,16 @@ package lib
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"fmt"
+	//"crypto/tls"
+	//"crypto/x509"
+	"github.com/Hyperledger-TWGC/ccs-gm/tls"
+	"github.com/Hyperledger-TWGC/ccs-gm/x509"
 	"io"
 	"io/ioutil"
 	"net"
-	"net/http"
+	//"net/http"
+	"github.com/Hyperledger-TWGC/net-go-gm/http"
 	_ "net/http/pprof" // import to support profiling
 	"os"
 	"path/filepath"
@@ -674,13 +677,23 @@ func (s *Server) listenAndServe() (err error) {
 			}
 		}
 
+		// config := &tls.Config{
+		// 	Certificates: []tls.Certificate{*cer},
+		// 	ClientAuth:   clientAuth,
+		// 	ClientCAs:    certPool,
+		// 	MinVersion:   tls.VersionTLS12,
+		// 	MaxVersion:   tls.VersionTLS12,
+		// 	CipherSuites: stls.DefaultCipherSuites,
+		// }
+
 		config := &tls.Config{
 			Certificates: []tls.Certificate{*cer},
 			ClientAuth:   clientAuth,
 			ClientCAs:    certPool,
-			MinVersion:   tls.VersionTLS12,
+			MinVersion:   tls.VersionGMSSL,
 			MaxVersion:   tls.VersionTLS12,
-			CipherSuites: stls.DefaultCipherSuites,
+			CipherSuites: stls.DefaultGMTLSCipherSuites,
+			GMSupport: &tls.GMSupport{},
 		}
 
 		listener, err = tls.Listen("tcp", addr, config)
